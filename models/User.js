@@ -1,51 +1,51 @@
 const { Schema, model } = require('mongoose');
 const moment = require('moment');
+const { User } = require('.');
 
-const ReactionsSchema = new Schema({
-    username: {
-        type: String,
-        unique: true,
-        required: true,
-        trim: true
-
+const userController={
+    getAllUser (req,res) {
+        User.find({})
+        .select('-__v')
+        .sort ({_id:-1})
+        .then(dbUserData => res.json (dbUserData))
+        .catch(err=> {
+            console.log(err);
+            res.sendStatus(400);
+        });
     },
 
-    email: {
-        type: String,
-        required: true,
-        unique: true,
-        match: [/.+@+\..+/]
-    },
-
-    thoughts: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'Thoughts'
-        },
-    ],
-    friends: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'User'
-        }
-
-    ]
-},
-    {
-        toJSON: {
-            virtuals: true,
-        },
-        id: false
+    getUserId, ({params},res){
+        User.findOne ({_id.params.id})
+        .populate ({
+            path: 'thoughts',
+            select: '-__v'
+        })
+        .populate ({
+            path: 'friends',
+            select: '-__v'
+        })
     }
+    createUser,
+    deleteUser,
+    addFriend,
+    deleteFriend,
+}= require ('../../controllers/user-controller');
 
 
-);
+router
+.route ('/')
+.get(getAllUser)
+.post(createUser)
 
-UserSchema.virtual('friendCount').get(function () {
-    returthis.friends.length;
+router
+.route ('/')
+.get(getUserId)
+.put(createUser)
+.delete(deleteUser);
 
-});
+router
+    .route('/:userId/friends/:friendId')
+    .post(addFriend)
+    .delete(deleteFriend);
 
-const User = model('User', UserSchema);
-
-module.exports = User;
+    module.exports = userController;
