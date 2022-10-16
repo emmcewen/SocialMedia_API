@@ -1,51 +1,45 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model} = require('mongoose');
 const moment = require('moment');
-const { User } = require('.');
 
-const userController={
-    getAllUser (req,res) {
-        User.find({})
-        .select('-__v')
-        .sort ({_id:-1})
-        .then(dbUserData => res.json (dbUserData))
-        .catch(err=> {
-            console.log(err);
-            res.sendStatus(400);
-        });
+const UserSchema= new Schema ({
+    username: {
+        type:String,
+        unique: true,
+        required: true,
+        trim: true
     },
+    email:{
+        type:String,
+        required: true,
+        unique: true,
+        match: [/.+@.+\..+/]
+    },
+    friends: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'User'
+        }
+    ]
+},
+{
+    toJSON: {
+        virtuals: true
+    },
+    id:false
+}
 
-    getUserId, ({params},res){
-        User.findOne ({_id.params.id})
-        .populate ({
-            path: 'thoughts',
-            select: '-__v'
-        })
-        .populate ({
-            path: 'friends',
-            select: '-__v'
-        })
-    }
-    createUser,
-    deleteUser,
-    addFriend,
-    deleteFriend,
-}= require ('../../controllers/user-controller');
+);
 
+// Create a virtual property `fullName` that gets and sets the user's full name
+userSchema
+  .virtual('friendCount')
+  // Getter
+  .get(function () {
+    return this.friends.length;
 
-router
-.route ('/')
-.get(getAllUser)
-.post(createUser)
+  });
 
-router
-.route ('/')
-.get(getUserId)
-.put(createUser)
-.delete(deleteUser);
+const User = model('user', userSchema);
 
-router
-    .route('/:userId/friends/:friendId')
-    .post(addFriend)
-    .delete(deleteFriend);
+module.exports = User;
 
-    module.exports = userController;
