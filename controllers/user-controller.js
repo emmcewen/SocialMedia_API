@@ -1,6 +1,7 @@
-const User = require('../models/User');
+const User = require('../models');
 
-module.exports = {
+const userController ={
+
   getUsers(req, res) {
     User.find()
       .then((users) => res.json(users))
@@ -48,3 +49,4 @@ module.exports = {
       .catch((err) => res.status(500).json(err));
   },
 };
+module.exports = userController
