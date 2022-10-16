@@ -12,29 +12,28 @@ const thoughtsController = {
         .select ("__v")
         .then ((thoughts)=>
         !thoughts
-        ? res.status (404).json ({message: {"Not valid Id"})
+        ? res.status (404).json ({message: "Not valid Id"})
         :res.json (thoughts)
         )
         .catch ((err)=> res.status(500).json (err));
         },
-        createThoughts ((req,res){
+        createThoughts (req,res){
             Thoughts.create (req.body)
             .then (({_id})=>{
                 return User.findOneAndUpdate(
-                    {_id req.body.userId},
+                    {_id: req.body.userId},
                     {$push: {thoughts:_id}},
                     {new:true}
                 );
             })
             .then ((thoughts)=>
             !thoughts
-        ? res.status (404).json ({message:Not valid Id})
+        ? res.status (404).json ({message:"Not valid Id"})
         : res.json (thoughts)
         )
         .catch ((err)=> res.status(500).json (err));
         },
-
-        updateThoughts (req, res){
+        updateThoughts(req, res) {
             Thoughts.findOneAndUpdate(
                 {_id: req.params.thoughtsId},
                 {$set: req.body},
@@ -42,7 +41,7 @@ const thoughtsController = {
             )
             .then ((user)=>
             !user
-            ? res.status (404).json ({message:Not valid Id})
+            ? res.status (404).json ({message:"Not valid Id"})
             : res.json (user)
 
             )
@@ -50,17 +49,17 @@ const thoughtsController = {
         },
 
         deleteThoughts (req, res) {
-            Thoughts.findOneAndDelete ({_id: req.params.thoughtsId}),
+            Thoughts.findOneAndDelete ({_id: req.params.thoughtsId})
             .then ((thoughts)=>
             !thoughts
         ? res.status (404).json ({message:"Not valid Id"})
         : User.findOneAndUpdate(
-            {thoughts req.params.thoughtsId},
+            {thoughts: req.params.thoughtsId},
             {$pull: {thoughts: req.params.thoughtsId}},
             {new:true}
         )
         )
-        .then ((user)=>)
+        .then ((user)=>
         !user
             ? res.status (404).json ({message:"Not valid id"})
             : res.json ({message: "successfully deleted"})
