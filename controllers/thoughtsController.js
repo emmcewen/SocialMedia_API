@@ -2,13 +2,13 @@ const { isModuleNamespaceObject } = require("util/types");
 const { User, Thoughts } = require("../models");
 
 const thoughtsController = {
-  getThoughts(req, res) {
+  getAllThoughts(req, res) {
     Thoughts.find({})
       .then((thoughts) => res.json(thoughts))
       .catch((err) => res.status(500).json(err));
   },
 
-  getOneThoughts(req, res) {
+  getSingleThought(req, res) {
     Thoughts.findOne({ _id: req.params.thoughtsId })
       .select("__v")
       .then((thoughts) =>

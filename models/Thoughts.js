@@ -1,9 +1,9 @@
 const { Schema, model, Types } = require("mongoose");
 const moment = require("moment");
-const reactionSchema = require("./reactions");
+const reactionSchema = require("./Reactions");
 const thoughtsSchema = new Schema(
   {
-    thoughtsText: {
+    thoughtsId: {
       type: String,
       required: true,
       minlength: 1,
