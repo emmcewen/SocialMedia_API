@@ -8,3 +8,4 @@ router.use ((req, res)=> {
     res.status(404).send ('<h1> 404 Error! Page not found!</h1>');
 
 });
+module.exports = router;
