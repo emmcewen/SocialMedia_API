@@ -1,8 +1,8 @@
-const { connect, connection } = require('mongoose');
-
-connect (process.env.MONGODB_URI || 'mongodb://localhost/socialNetwork_db',{
+const mongoose = require('mongoose');
+require ("dotenv").config()
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/socialNetwork_db',{
     useNewURLParser: true,
     useUnifiedTopology:true,
 });
 
-module.exports = connection;
+module.exports = mongoose.connection;
