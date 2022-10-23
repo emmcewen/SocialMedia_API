@@ -16,7 +16,7 @@ router
 .post(createUser)
 
 router
-.route ('/')
+.route ('/:userId')
 .get(getSingleUser)
 .put(createUser)
 .delete(deleteUser);
